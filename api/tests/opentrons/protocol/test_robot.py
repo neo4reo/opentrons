@@ -26,13 +26,11 @@ def test_pos_tracker_persistance(robot):
         robot, mount='left', name='my-fancy-pancy-pipette'
     )
     plate = containers_load(robot, 'trough-12row', '5')
-    # TODO(artyom, 20171030): re-visit once z-value is back into container data
     assert robot.max_placeable_height_on_deck(plate) == 40.0
 
     robot.poses = p200._move(robot.poses, x=10, y=10, z=10)
     robot.calibrate_container_with_instrument(plate, p200, save=False)
 
-    # TODO(artyom, 20171030): re-visit once z-value is back into container data
     assert robot.max_placeable_height_on_deck(plate) == 10.0
 
 
@@ -60,11 +58,6 @@ def test_get_serial_ports_list(robot, monkeypatch):
     assert 'Virtual Smoothie' in robot.get_serial_ports_list()
 
 
-# TODO(artyom, 20171030): confirm desired behavior and remove if needed
-# def test_firmware_verson(robot):
-#     assert SMOOTHIE_VERSION == robot._driver.firmware_version
-
-
 def test_add_container(robot):
     c1 = robot.add_container('96-flat', '1')
     trash = robot.fixed_trash
@@ -82,14 +75,6 @@ def test_comment(robot):
     robot.clear_commands()
     robot.comment('hello')
     assert robot.commands() == ['hello']
-
-
-# TODO(artyom, 20171030): confirm desired behavior and remove if needed
-# def test_home_after_disconnect(robot):
-#     robot._driver.connection = None
-
-#     with pytest.raises(RuntimeError):
-#         robot.home()
 
 
 def test_create_arc(robot):
@@ -143,19 +128,6 @@ def test_create_arc(robot):
     assert res == expected
 
 
-# TODO(artyom, 20171030): the new driver doesn't have this functionality
-# def test_disconnect(robot):
-#     robot.disconnect()
-#     assert not robot.is_connected
-
-
-# TODO(artyom, 20171030): the new driver doesn't have this functionality
-# consider removing the test
-# def test_get_connected_port(robot):
-#     res = robot.get_connected_port()
-#     assert res == drivers.VIRTUAL_SMOOTHIE_PORT
-
-
 def test_robot_move_to(robot):
     p200 = pipette.Pipette(robot, mount='right', name='pipette')
     robot.move_to(instrument=p200, location=(robot._deck, (100, 0, 0)))
@@ -206,91 +178,6 @@ def test_home(robot):
     # self.assertDictEqual(robot.axis_homed, {
     #     'x': True, 'y': True, 'z': True, 'a': True, 'b': True
     # })
-
-
-# TODO(artyom, 20171030): revisit this test after
-# diagnostics has been scoped and planned
-# def test_versions(robot):
-#     res = robot.versions()
-#     expected = {
-#         'config': {
-#             'version': 'v2.0.0',
-#             'compatible': True
-#         },
-#         'firmware': {
-#             'version': self.smoothie_version,
-#             'compatible': True
-#         },
-#         'ot_version': {
-#             'version': 'one_pro_plus',
-#             'compatible': True
-#         }
-#     }
-#     assert res == expected
-
-# TODO(artyom, 20171030): revisit this test after
-# diagnostics has been scoped and planned
-# def test_diagnostics(robot):
-#     res = robot.diagnostics()
-#     expected = {
-#         'axis_homed': {
-#             'x': True, 'y': True, 'z': True, 'a': True, 'b': True
-#         },
-#         'switches': {
-#             'x': False,
-#             'y': False,
-#             'z': False,
-#             'a': False,
-#             'b': False
-#         },
-#         'steps_per_mm': {
-#             'x': 80.0,
-#             'y': 80.0
-#         }
-#     }
-#     self.assertDictEqual(res, expected)
-
-#     robot.disconnect()
-#     robot.connect()
-#     self.assertRaises(RuntimeWarning, robot.move_head, x=-199)
-#     res = robot.diagnostics()
-#     expected = {
-#         'axis_homed': {
-#             'x': False, 'y': False, 'z': False, 'a': False, 'b': False
-#         },
-#         'switches': {
-#             'x': True,
-#             'y': False,
-#             'z': False,
-#             'a': False,
-#             'b': False
-#         },
-#         'steps_per_mm': {
-#             'x': 80.0,
-#             'y': 80.0
-#         }
-#     }
-#     self.assertDictEqual(res, expected)
-
-#     robot.home('x', enqueue=False)
-#     res = robot.diagnostics()
-#     expected = {
-#         'axis_homed': {
-#             'x': True, 'y': False, 'z': False, 'a': False, 'b': False
-#         },
-#         'switches': {
-#             'x': False,
-#             'y': False,
-#             'z': False,
-#             'a': False,
-#             'b': False
-#         },
-#         'steps_per_mm': {
-#             'x': 80.0,
-#             'y': 80.0
-#         }
-#     }
-#     assert res == expected
 
 
 def test_get_motor_caching(robot):
