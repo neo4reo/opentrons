@@ -150,7 +150,7 @@ class PipetteTest(unittest.TestCase):
         assert robot.commands() == []
         self.p300.tip_attached = True
         self.p300.aspirate(0)
-        assert robot.commands() == ['Aspirating 0 uL from ? at 1.0 speed']  # noqa
+        assert robot.commands() == ['Aspirating 0 uL from ? at 1.0 speed']
 
     def test_get_plunger_position(self):
 
